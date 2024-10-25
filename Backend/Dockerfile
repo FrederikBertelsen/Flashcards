@@ -12,6 +12,7 @@ RUN dotnet restore "Backend.csproj"
 COPY . .
 WORKDIR "/src/"
 RUN dotnet build "Backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet ef database update
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
@@ -20,5 +21,4 @@ RUN dotnet publish "Backend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:U
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN dotnet ef database update
 ENTRYPOINT ["dotnet", "Backend.dll"]

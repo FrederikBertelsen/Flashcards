@@ -45,6 +45,12 @@ public class Startup
             dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
 
+            if (!dbContext.Database.GetPendingMigrations().Any())
+            {
+                dbContext.Database.Migrate();
+                dbContext.Seed().GetAwaiter().GetResult();
+            }
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
