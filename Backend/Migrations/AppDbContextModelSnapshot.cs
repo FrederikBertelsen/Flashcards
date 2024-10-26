@@ -138,42 +138,15 @@ namespace Backend.Migrations
                     b.Property<int>("ClozeIndex")
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Difficulty")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ElapsedDays")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("FlashcardId")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Lapses")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime?>("LastReviewDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LearningSessionId")
                         .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Reps")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ScheduledDays")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<float>("Stability")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("State")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -190,42 +163,15 @@ namespace Backend.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("TEXT");
 
-                    b.Property<float>("Difficulty")
-                        .HasColumnType("REAL");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ElapsedDays")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LastElapsedDays")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("LearningSessionId")
                         .IsRequired()
                         .HasMaxLength(12)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("ReviewDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ReviewId")
                         .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("ScheduledDays")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<float>("Stability")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("State")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -369,6 +315,49 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Backend.Models.DTOs.Card", "Card", b1 =>
+                        {
+                            b1.Property<string>("ReviewId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<float>("Difficulty")
+                                .HasColumnType("REAL");
+
+                            b1.Property<DateTime>("Due")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ElapsedDays")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Lapses")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateTime?>("LastReview")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Reps")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("ScheduledDays")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<float>("Stability")
+                                .HasColumnType("REAL");
+
+                            b1.Property<int>("State")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("ReviewId");
+
+                            b1.ToTable("Reviews");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ReviewId");
+                        });
+
+                    b.Navigation("Card")
+                        .IsRequired();
+
                     b.Navigation("Flashcard");
 
                     b.Navigation("LearningSession");
@@ -394,7 +383,50 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Backend.Models.Log", "Log", b1 =>
+                        {
+                            b1.Property<string>("ReviewLogId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<float>("Difficulty")
+                                .HasColumnType("REAL");
+
+                            b1.Property<DateTime>("Due")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ElapsedDays")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("LastElapsedDays")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("Rating")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateTime>("Review")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ScheduledDays")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<float>("Stability")
+                                .HasColumnType("REAL");
+
+                            b1.Property<int>("State")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("ReviewLogId");
+
+                            b1.ToTable("ReviewLogs");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ReviewLogId");
+                        });
+
                     b.Navigation("LearningSession");
+
+                    b.Navigation("Log")
+                        .IsRequired();
 
                     b.Navigation("Review");
                 });
